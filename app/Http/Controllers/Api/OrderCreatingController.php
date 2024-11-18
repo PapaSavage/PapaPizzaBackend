@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Cart;
 use App\Models\CartItems;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class OrderCreatingController extends Controller
 {
@@ -16,8 +17,6 @@ class OrderCreatingController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'fio' => 'required|string',
-                'phone' => 'required|string',
                 'address' => 'required|string',
                 'comment' => 'nullable|string',
                 'listofpizza' => 'required|array',
@@ -27,11 +26,6 @@ class OrderCreatingController extends Controller
             ]);
 
             DB::beginTransaction();
-
-            $client = Client::firstOrCreate(
-                ['phone' => $validatedData['phone']],
-                ['name' => $validatedData['fio']]
-            );
 
             $cart = Cart::create();
 
@@ -44,7 +38,7 @@ class OrderCreatingController extends Controller
             }
 
             $order = Order::create([
-                'client_id' => $client->id,
+                'client_id' => Auth::id(),
                 'cart_id' => $cart->id,
                 'address' => $validatedData['address'],
                 'comment' => $validatedData['comment'] ?? '',
