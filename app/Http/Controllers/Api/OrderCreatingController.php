@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Client;
 use App\Models\Cart;
-use App\Models\CartItems;
+use App\Models\Cartitems;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +30,7 @@ class OrderCreatingController extends Controller
             $cart = Cart::create();
 
             foreach ($validatedData['listofpizza'] as $pizza) {
-                CartItems::create([
+                Cartitems::create([
                     'cart_id' => $cart->id,
                     'pizza_id' => $pizza['id'],
                     'quantity' => $pizza['quantity'],
